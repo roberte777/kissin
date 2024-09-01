@@ -184,13 +184,11 @@ end
 
 function M.check_and_sync(immediate)
 	if should_sync() then
-		vim.notify("syincing")
 		if immediate then
 			M.perform_sync()
 		end
 		M.start_sync()
 	else
-		vim.notify("not syincing")
 		M.stop_sync()
 	end
 end
