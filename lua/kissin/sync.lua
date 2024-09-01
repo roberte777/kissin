@@ -4,6 +4,9 @@ local utils = require("kissin.utils")
 local sync_timer = nil
 local had_sync_failure = false
 
+local last_conflict_notification = 0
+local CONFLICT_NOTIFICATION_COOLDOWN = 300000 -- 5 minutes in milliseconds
+
 local function should_sync()
 	local config = vim.g.kissin_config
 	if config and config.dir_path then
@@ -74,12 +77,16 @@ local function sync_repo(dir_path, callback)
 						if pull_success then
 							handle_push()
 						else
-							utils.notify("Pull failed. There might be merge conflicts.", vim.log.levels.ERROR)
-							utils.notify(pull_output, vim.log.levels.DEBUG)
-							utils.notify(
-								"Please resolve conflicts manually and then run :KissinSync",
-								vim.log.levels.INFO
-							)
+							local current_time = vim.loop.now()
+							if current_time - last_conflict_notification > CONFLICT_NOTIFICATION_COOLDOWN then
+								utils.notify("Pull failed. There might be merge conflicts.", vim.log.levels.ERROR)
+								utils.notify(pull_output, vim.log.levels.DEBUG)
+								utils.notify(
+									"Please resolve conflicts manually and then run :KissinSync",
+									vim.log.levels.INFO
+								)
+								last_conflict_notification = current_time
+							end
 							callback(false)
 						end
 					end)
