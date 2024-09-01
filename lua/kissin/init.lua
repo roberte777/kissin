@@ -34,7 +34,7 @@ end
 function M.manual_sync()
 	local config = vim.g.kissin_config
 	if config and config.dir_path then
-		sync.perform_sync()
+		sync.perform_sync(true)
 	else
 		utils.notify("Kissin is not properly configured.", vim.log.levels.ERROR)
 	end
@@ -56,12 +56,12 @@ function M.setup(config)
 	end
 
 	-- Set up autocommands
-	-- vim.api.nvim_create_autocmd("VimEnter", {
-	--   callback = M.on_vim_enter
-	-- })
-	-- vim.api.nvim_create_autocmd("DirChanged", {
-	--   callback = M.on_dir_changed
-	-- })
+	vim.api.nvim_create_autocmd("VimEnter", {
+		callback = M.on_vim_enter,
+	})
+	vim.api.nvim_create_autocmd("DirChanged", {
+		callback = M.on_dir_changed,
+	})
 	vim.api.nvim_create_autocmd("BufEnter", {
 		callback = M.on_buf_enter,
 	})
