@@ -28,7 +28,12 @@ function M.on_buf_enter()
 end
 
 function M.on_buf_write()
-	sync.check_and_sync(true) -- Immediate sync
+	local file_path = vim.fn.expand("%:p")
+	if utils.is_in_dir_path(file_path, vim.g.kissin_config.dir_path) then
+		sync.check_and_sync(true) -- Immediate sync
+	else
+		sync.check_and_sync(false)
+	end
 end
 
 function M.manual_sync()

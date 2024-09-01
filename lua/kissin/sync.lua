@@ -165,6 +165,8 @@ function M.sync_interval()
 	local config = vim.g.kissin_config
 	if config and config.dir_path and should_sync() then
 		M.perform_sync()
+	else
+		M.stop_sync()
 	end
 end
 
@@ -192,5 +194,6 @@ function M.check_and_sync(immediate)
 		M.stop_sync()
 	end
 end
+
 
 return M
