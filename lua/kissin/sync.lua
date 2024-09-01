@@ -49,7 +49,6 @@ local function sync_repo(dir_path, callback)
 
 	local function handle_push()
 		git_command("git push", function(success)
-			utils.notify("push", vim.log.levels.WARN)
 			callback(success)
 		end)
 	end
@@ -66,7 +65,7 @@ local function sync_repo(dir_path, callback)
 								local bufname = vim.api.nvim_buf_get_name(buf)
 								if utils.is_in_dir_path(bufname, vim.g.kissin_config.dir_path) then
 									vim.api.nvim_buf_call(buf, function()
-										vim.cmd('checktime')
+										vim.cmd("checktime")
 									end)
 								end
 							end
